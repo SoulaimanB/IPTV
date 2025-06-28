@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URvision - IPTV Maroc</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #100625;
+      color: white;
+    }
+
+    .top-bar {
+      background-color: red;
+      color: black;
+      font-style: italic;
+      text-align: center;
+      padding: 5px 0;
+      font-size: 0.95rem;
+    }
+
+    .navbar {
+      background-color: #212341;
+      box-shadow: 0 4px 8px rgba(229, 227, 227, 0.2);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .navbar-brand {
+      color: red !important;
+      font-weight: bold;
+      font-size: 1.7rem;
+    }
+
+    .navbar-nav {
+      margin: 0 auto;
+      gap: 25px;
+    }
+
+    .nav-link {
+      color: #fff !important;
+      font-size: 1.2rem;
+      font-weight: 600;
+      position: relative;
+    }
+
+    .nav-link:hover::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: red;
+      bottom: -5px;
+      left: 0;
+    }
+
+    .nav-link:hover, .nav-link:focus {
+      color: red !important;
+    }
+
+    .dropdown-menu {
+      background-color: #111;
+      border: none;
+    }
+
+    .dropdown-item {
+      color: #fff;
+    }
+
+    .dropdown-item:hover {
+      background-color: red;
+      color: #fff;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-icons a {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .social-icons a:hover {
+      color: red;
+    }
+
+    .hero-section {
+  padding-top: 180px; /* يعوض ارتفاع top bar + navbar */
+}
+
+    .hero-section {
+      padding: 60px 20px;
+      margin-top: 100px;
+    }
+
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 800;
+    }
+
+    .hero-text {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      font-weight: 500;
+    }
+
+    .cta-button {
+      margin-top: 30px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+
+    .movie-slider-container, .sport-slider-container {
+      overflow: hidden;
+      width: 100%;
+      background: #190f31;
+      padding: 20px 0;
+    }
+
+    .movie-slider-track {
+      display: flex;
+      gap: 20px;
+      animation: scrollLeft 30s linear infinite;
+    }
+
+    .movie-slider-track img {
+      height: 300px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .movie-slider-track img:hover {
+      transform: scale(1.05);
+    }
+
+    .hero-title-slider {
+      font-size: 3rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 1cm;
+    }
+
+    .subscriptions-section {
+  background-color: #1a0d2b;
+}
+
+.subscriptions-section .card {
+  border: none;
+}
+
+.subscriptions-section h2, .subscriptions-section p {
+  color: #fff;
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #25d366, #128c7e);
+  color: white;
+  border-radius: 50%;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.15);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  color: white;
+}
+
+
+    /* Keyframes for normal scroll (left) */
+    @keyframes scrollLeft {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Keyframes for reverse scroll (right) */
+    @keyframes scrollRight {
+      0% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .scroll-reverse {
+      animation: scrollRight 30s linear infinite;
+    }
+
+    @media (max-width: 767px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top bar + navbar wrapper -->
+<div style="position: fixed; top: 0; width: 100%; z-index: 1050;">
+  <!-- Top red bar -->
+  <div class="top-bar">
+    Best IPTV Provider in France
+  </div>
+
+  <!-- Main navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a class="navbar-brand" href="#">URvision</a>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarCentered">
+        <ul class="navbar-nav text-center">
+          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">IPTV</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="social-icons d-none d-lg-flex">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-telegram"></i></a>
+        <a href="#"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCentered">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+</div>
+
+
+  <!-- Hero Section -->
+  <div class="container hero-section">
+    <div class="row align-items-center" style="min-height: 80vh; margin-bottom: -2cm; margin-top: -5cm;">
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="hero-title">Regardez Tout, Partout, en 4K – IPTV Fiable à Petit Prix !</h1>
+        <p class="hero-text">Profitez de milliers de chaînes internationales, films, séries, et événements sportifs en qualité 4K, où que vous soyez. Un service stable, rapide, et accessible à tous les budgets. Test gratuit disponible !</p>
+        <a href="#" class="btn btn-primary btn-lg cta-button">Profitez dès Maintenant</a>
+      </div>
+      <div class="col-lg-6 hero-image text-center mt-4 mt-lg-0">
+        <img src="img/imgip.jpg" alt="Hero Image">
+      </div>
+    </div>
+  </div>
+
+  <!-- Movies Section -->
+  <div class="movie-slider-container">
+    <h1 class="hero-title-slider">Movies</h1>
+    <h5 style="text-align: center; margin-top: -30px;">Enjoy watching your favorite Movies and Series</h5>
+    <div class="movie-slider-track" id="slider-track-movies">
+      <img src="img/img1.jpg" alt="1" />
+      <img src="img/img1.jpg" alt="2" />
+      <img src="img/img1.jpg" alt="3" />
+      <img src="img/img1.jpg" alt="4" />
+      <img src="img/img1.jpg" alt="5" />
+      <img src="img/img1.jpg" alt="4" />
+      <img src="img/img1.jpg" alt="5" />
+    </div>
+  </div>
+
+  <!-- Sports Section (Reverse Scroll) -->
+  <div class="sport-slider-container">
+    <h1 class="hero-title-slider">Sports</h1>
+    <h5 style="text-align: center; margin-top: -30px;">Enjoy watching your favorite Sports Events</h5>
+    <div class="movie-slider-track scroll-reverse" id="slider-track-sports">
+      <img src="img/Img2.png" alt="1" />
+      <img src="img/Img2.png" alt="2" />
+      <img src="img/Img2.png" alt="3" />
+      <img src="img/Img2.png" alt="4" />
+      <img src="img/Img2.png" alt="5" />
+      <img src="img/Img2.png" alt="4" />
+      <img src="img/Img2.png" alt="5" />
+    </div>
+  </div>
+
+
+<section class="subscriptions-section py-5 text-white" style="background-color: #1a0d2b;">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold" style="font-size: 2.5rem;">Choisissez votre meilleur abonnement IPTV Maroc</h2>
+    <p class="text-center mb-5" style="font-size: 1.2rem;">✨ Qualité, stabilité et prix réduit ✨</p>
+
+    <div class="row justify-content-center">
+      
+      <!-- Abonnement 6 Mois -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center bg-gradient border-0 shadow" style="background: linear-gradient(145deg, #2d1957, #1a0d2b); border-radius: 15px;">
+          <div class="card-body d-flex flex-column">
+            <h3 class="card-title text-warning">6 Mois</h3>
+            <h4 class="display-6 text-light">€19.99</h4>
+            <p class="" style="text-color: aliceblue;">Free Test 🎁</p>
+            <ul class="list-unstyled text-start text-white small flex-grow-1">
+              <li>✅ 4K/FHD/HD/SD Qualité</li>
+              <li>✅ +33 000 Chaînes Live & Sports</li>
+              <li>✅ +194 000 Films & Séries</li>
+              <li>✅ Compatible tous appareils</li>
+              <li>✅ AntiFreeze & MAJ quotidiennes</li>
+              <li>✅ TV Guide (EPG) & Replay</li>
+              <li>✅ Support 7j/7</li>
+            </ul>
+            <a href="#" class="btn btn-outline-warning mt-auto">Commander par WhatsApp</a>
+            <p class="mt-2 text-success">✔️ Satisfait ou remboursé</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abonnement 12 Mois -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center bg-gradient border-0 shadow-lg" style="background: linear-gradient(145deg, #362062, #1a0d2b); border-radius: 15px;">
+          <div class="card-body d-flex flex-column">
+            <h3 class="card-title text-warning">12 Mois</h3>
+            <h4 class="display-6 text-light">€32.00</h4>
+            <p class="" style="color: aliceblue;">Free Test 🎁</p>
+            <ul class="list-unstyled text-start text-white small flex-grow-1">
+              <li>✅ 4K/FHD/HD/SD Qualité</li>
+              <li>✅ +33 000 Chaînes Live & Sports</li>
+              <li>✅ +194 000 Films & Séries</li>
+              <li>✅ Compatible tous appareils</li>
+              <li>✅ AntiFreeze & MAJ quotidiennes</li>
+              <li>✅ TV Guide (EPG) & Replay</li>
+              <li>✅ Support 7j/7</li>
+            </ul>
+            <a href="#" class="btn btn-warning mt-auto">Commander par WhatsApp</a>
+            <p class="mt-2 text-success">✔️ Satisfait ou remboursé</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abonnement 24 Mois -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center bg-gradient border-0 shadow" style="background: linear-gradient(145deg, #2d1957, #1a0d2b); border-radius: 15px;">
+          <div class="card-body d-flex flex-column">
+            <h3 class="card-title text-warning">24 Mois</h3>
+            <h4 class="display-6 text-light">€59.99</h4>
+            <p class="">Free Test 🎁</p>
+            <ul class="list-unstyled text-start text-white small flex-grow-1">
+              <li>✅ 4K/FHD/HD/SD Qualité</li>
+              <li>✅ +33 000 Chaînes Live & Sports</li>
+              <li>✅ +194 000 Films & Séries</li>
+              <li>✅ Compatible tous appareils</li>
+              <li>✅ AntiFreeze & MAJ quotidiennes</li>
+              <li>✅ TV Guide (EPG) & Replay</li>
+              <li>✅ Support 7j/7</li>
+            </ul>
+            <a href="#" class="btn btn-outline-warning mt-auto">Commander par WhatsApp</a>
+            <p class="mt-2 text-success">✔️ Satisfait ou remboursé</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<dvi class="py-5 bg-dark text-white" style="background-color:#190f31;" >
+  <div class="container" >
+    <h2 class="text-center mb-4 fw-bold" style="font-size: 2.2rem;">Ce que disent nos clients</h2>
+    <p class="text-center mb-5">Des centaines de clients satisfaits chaque jour sur WhatsApp !</p>
+
+    <div class="row g-4 justify-content-center">
+      
+      <!-- Screenshot 1 -->
+      <div class="col-md-4">
+        <div class="card bg-secondary border-0 shadow-sm">
+          <img src="img/screen1.png" class="card-img-top rounded-top" alt="Témoignage client 1">
+          <div class="card-body text-center">
+            <p class="card-text">“Service rapide et top qualité ! Merci URvision 🙌”</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot 2 -->
+      <div class="col-md-4">
+        <div class="card bg-secondary border-0 shadow-sm">
+          <img src="img/screen1.png" class="card-img-top rounded-top" alt="Témoignage client 2">
+          <div class="card-body text-center">
+            <p class="card-text">“J’ai eu mon abonnement en 5 min 💯”</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot 3 -->
+      <div class="col-md-4">
+        <div class="card bg-secondary border-0 shadow-sm">
+          <img src="img/screen1.png" class="card-img-top rounded-top" alt="Témoignage client 3">
+          <div class="card-body text-center">
+            <p class="card-text">“Chaînes stables, sport en HD 🔥 Merci beaucoup !”</p>
+          </div>
+        </div>
+      </div>
+          <p class="text-center mb-5 " style="color:aliceblue;">More...</p>
+
+    </div>
+  </div>
+</div>
+
+
+<section class="py-5" style="background-color: rgba(0,0,0,0.4); color: white;">
+  <div class="container text-center">
+    <h2 class="mb-4 fw-bold" style="font-size: 2.3rem;">Pourquoi choisir notre abonnement IPTV ?</h2>
+    <p class="mb-5 text-light">Toutes les fonctionnalités incluses dans nos abonnements</p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+      
+      <!-- Card 1 -->
+      <div class="col">
+        <div class="d-flex align-items-start bg-dark p-4 rounded shadow h-100 text-start">
+          <i class="fas fa-tv fa-2x text-warning me-3"></i>
+          <div>
+            <h5 class="fw-bold mb-1">+33 000 Chaînes</h5>
+            <p class="text-light mb-0">Tous vos programmes préférés en direct : sports, news, films, etc.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col">
+        <div class="d-flex align-items-start bg-dark p-4 rounded shadow h-100 text-start">
+          <i class="fas fa-film fa-2x text-danger me-3"></i>
+          <div>
+            <h5 class="fw-bold mb-1">+194 000 Films & Séries</h5>
+            <p class="text-light mb-0">Une immense bibliothèque VOD constamment mise à jour.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col">
+        <div class="d-flex align-items-start bg-dark p-4 rounded shadow h-100 text-start">
+          <i class="fas fa-bolt fa-2x text-success me-3"></i>
+          <div>
+            <h5 class="fw-bold mb-1">Stabilité & Vitesse</h5>
+            <p class="text-light mb-0">Serveurs performants sans coupures, qualité 4K/Full HD.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col">
+        <div class="d-flex align-items-start bg-dark p-4 rounded shadow h-100 text-start">
+          <i class="fas fa-mobile-alt fa-2x text-info me-3"></i>
+          <div>
+            <h5 class="fw-bold mb-1">Compatibilité Totale</h5>
+            <p class="text-light mb-0">TV, Smart TV, Android Box, iPhone, PC, Mac et plus.</p>
+          </div></div></div></div></div></section>
+
+
+          <section class="py-5" style="background-color: #100625; color: white;">
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">Contactez-Nous</h2>
+    <p class="text-center mb-5 text-muted">Une question ? Un test gratuit ? Écrivez-nous et on vous répond rapidement via WhatsApp ou email.</p>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form action="https://formsubmit.co/benachoursoulayman@gmail.com" method="POST">
+  <!-- Options pour sécurité et personnalisation -->
+  <input type="hidden" name="_captcha" value="false">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_autoresponse" value="Merci pour votre message, nous vous répondrons bientôt.">
+
+  <div class="mb-3">
+    <label for="name" class="form-label">Nom</label>
+    <input type="text" class="form-control" name="Nom" id="name" placeholder="Votre nom" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Adresse Email</label>
+    <input type="email" class="form-control" name="Email" id="email" placeholder="votre@email.com" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="message" class="form-label">Message</label>
+    <textarea class="form-control" name="Message" id="message" rows="4" placeholder="Votre message..." required></textarea>
+  </div>
+
+  <button type="submit" class="btn btn-danger w-100 fw-bold">Envoyer</button>
+</form>
+
+      </div>
+
+      <div class="col-md-5 mt-5 mt-md-0">
+        <div class="bg-dark p-4 rounded shadow text-center">
+          <h5 class="fw-bold mb-3">Ou contactez-nous directement :</h5>
+          <p><i class="fab fa-whatsapp me-2 text-success"></i><strong>WhatsApp :</strong> +212 6 00 00 00 00</p>
+          <p><i class="fas fa-envelope me-2 text-warning"></i><strong>Email :</strong> contact@iptvmaroc.com</p>
+          <p><i class="fas fa-map-marker-alt me-2 text-danger"></i><strong>Adresse :</strong> Casablanca, Maroc</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<a href="https://wa.me/212622946401" 
+   class="whatsapp-float" 
+   target="_blank" 
+   title="Contactez-nous sur WhatsApp">
+  <i class="fab fa-whatsapp whatsapp-icon"></i>
+</a>
+
+<footer style="background: linear-gradient(to right, #190f31, #1f1f46); color: white;">
+  <div class="container py-5">
+    <div class="row">
+
+      <!-- Logo + description -->
+      <div class="col-md-4 mb-4">
+        <h3 class="fw-bold text-danger">URvision</h3>
+        <p class="text-light">Le meilleur abonnement IPTV au Maroc et en France. Qualité 4K, stabilité garantie, prix imbattables.</p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold text-white mb-3">Liens Rapides</h5>
+        <ul class="list-unstyled text-light">
+          <li><a href="#" class="text-decoration-none text-light">Accueil</a></li>
+          <li><a href="#" class="text-decoration-none text-light">Nos Abonnements</a></li>
+          <li><a href="#" class="text-decoration-none text-light">Test Gratuit</a></li>
+          <li><a href="#" class="text-decoration-none text-light">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info + Social -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold text-white mb-3">Nous Contacter</h5>
+        <p><i class="fas fa-envelope me-2 text-warning"></i> contact@iptvmaroc.com</p>
+        <p><i class="fab fa-whatsapp me-2 text-success"></i> +212 6 00 00 00 00</p>
+        <div class="d-flex gap-3 mt-3">
+          <a href="#" class="text-light fs-4"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-light fs-4"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="text-light fs-4"><i class="fab fa-telegram"></i></a>
+          <a href="#" class="text-light fs-4"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom text -->
+    <div class="text-center pt-4 border-top border-secondary mt-4">
+      <p class="mb-0 text-muted">&copy; 2025 URvision IPTV. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+
+  
+
+
+
+  <!-- Bootstrap + Clone Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function cloneImages(trackId) {
+      const track = document.getElementById(trackId);
+      const images = Array.from(track.querySelectorAll("img"));
+      images.forEach(img => {
+        const clone = img.cloneNode(true);
+        track.appendChild(clone);
+      });
+    }
+
+    cloneImages("slider-track-movies");
+    cloneImages("slider-track-sports");
+  </script>
+
+</body>
+</html>
